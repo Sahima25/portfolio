@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sahima T · research portfolio</title>
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* ---------- RESET & VARIABLES ---------- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --navy: #0A0F1F;        /* deep navy background */
+      --navy-light: #151E30;
+      --quantum-blue: #4B7BFF;
+      --violet: #9F7AEA;
+      --subtle-glow: rgba(75, 123, 255, 0.15);
+      --card-bg: rgba(18, 28, 46, 0.7);
+      --border-glow: rgba(75, 123, 255, 0.2);
+      --text-primary: #E8EEFF;
+      --text-secondary: #B0C4F0;
+      --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background-color: var(--navy);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      line-height: 1.6;
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+    }
+
+    /* subtle grid overlay */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-image: 
+        linear-gradient(rgba(75, 123, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(75, 123, 255, 0.02) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* ---------- UTILITY CLASSES ---------- */
+    .container {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .section {
+      padding: 5rem 0 4rem;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.7s cubic-bezier(0.2, 0.9, 0.3, 1), transform 0.7s cubic-bezier(0.2, 0.9, 0.3, 1);
+    }
+
+    .section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .section-title {
+      font-size: 2.2rem;
+      font-weight: 600;
+      margin-bottom: 2.5rem;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .section-title i {
+      color: var(--quantum-blue);
+      font-size: 2rem;
+      opacity: 0.9;
+    }
+
+    .section-title span {
+      background: linear-gradient(145deg, var(--quantum-blue), var(--violet));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ---------- NAVBAR ---------- */
+    .navbar {
+      position: sticky;
+      top: 1rem;
+      z-index: 100;
+      background: rgba(10, 15, 31, 0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 60px;
+      padding: 0.7rem 2rem;
+      margin: 1.5rem auto 0;
+      max-width: 900px;
+      border: 1px solid var(--border-glow);
+      box-shadow: 0 15px 35px -10px rgba(0,0,0,0.5), 0 0 0 1px rgba(75, 123, 255, 0.1) inset;
+    }
+
+    .nav-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1.8rem;
+    }
+
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1rem;
+      transition: color 0.2s, text-shadow 0.2s;
+      padding: 0.3rem 0;
+      border-bottom: 2px solid transparent;
+    }
+
+    .nav-links a:hover {
+      color: white;
+      text-shadow: 0 0 8px var(--quantum-blue);
+      border-bottom-color: var(--quantum-blue);
+    }
+
+    /* ---------- HERO ---------- */
+    .hero {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 3rem;
+      padding: 2rem 0 3rem;
+    }
+
+    .hero-content {
+      flex: 1 1 400px;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(75, 123, 255, 0.15);
+      border: 1px solid var(--quantum-blue);
+      border-radius: 40px;
+      padding: 0.3rem 1.2rem;
+      font-size: 0.9rem;
+      color: var(--quantum-blue);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-name {
+      font-size: 3.5rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, #ffffff 0%, #C0D4FF 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtitle {
+      font-size: 1.5rem;
+      font-weight: 400;
+      color: var(--text-secondary);
+      margin-bottom: 1.2rem;
+    }
+
+    .hero-highlight {
+      color: var(--quantum-blue);
+      font-weight: 500;
+    }
+
+    .hero-description {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin-bottom: 2rem;
+      border-left: 3px solid var(--violet);
+      padding-left: 1.5rem;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 2.5rem;
+      margin-top: 2rem;
+    }
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stat-number {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: white;
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      letter-spacing: 0.02em;
+    }
+
+    /* hero visual now contains an image */
+    .hero-visual {
+      flex: 0 0 280px;
+      height: 280px;
+      border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+      background: linear-gradient(145deg, var(--quantum-blue), var(--violet));
+      box-shadow: 0 20px 40px -10px var(--quantum-blue), 0 0 0 2px rgba(255,255,255,0.2) inset;
+      animation: morph 12s infinite alternate ease-in-out;
+      overflow: hidden;  /* ensures image follows the shape */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-visual img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;         /* covers the area without distortion */
+      display: block;
+      border-radius: inherit;    /* inherits the animated border-radius */
+    }
+
+    @keyframes morph {
+      0% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
+      50% { border-radius: 70% 30% 30% 70% / 60% 40% 60% 40%; }
+      100% { border-radius: 40% 60% 70% 30% / 40% 50% 50% 60%; }
+    }
+
+    /* ---------- CARD & TILT EFFECT ---------- */
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--border-glow);
+      border-radius: 30px;
+      padding: 2rem;
+      box-shadow: 0 15px 30px -15px black, 0 0 0 1px rgba(75, 123, 255, 0.1) inset;
+      transition: transform 0.25s ease, box-shadow 0.3s ease, border-color 0.2s;
+      transform-style: preserve-3d;
+      perspective: 1000px;
+    }
+
+    .card:hover {
+      transform: perspective(1000px) rotateX(1deg) rotateY(1deg) scale(1.01);
+      border-color: var(--quantum-blue);
+      box-shadow: 0 25px 40px -15px var(--quantum-blue), 0 0 0 1px var(--quantum-blue) inset;
+    }
+
+    /* different tilt directions for variety */
+    .card:nth-child(odd):hover {
+      transform: perspective(1000px) rotateX(0.5deg) rotateY(-1deg) scale(1.01);
+    }
+
+    /* ---------- SKILLS GRID ---------- */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    .skill-category h3 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 1.2rem;
+      color: white;
+      border-left: 4px solid var(--violet);
+      padding-left: 1rem;
+    }
+
+    .skill-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+    }
+
+    .chip {
+      background: rgba(75, 123, 255, 0.1);
+      border: 1px solid rgba(75, 123, 255, 0.3);
+      border-radius: 40px;
+      padding: 0.4rem 1.2rem;
+      font-size: 0.95rem;
+      color: var(--text-primary);
+      transition: 0.2s;
+    }
+
+    .chip:hover {
+      background: rgba(75, 123, 255, 0.25);
+      border-color: var(--quantum-blue);
+      transform: translateY(-2px);
+    }
+
+    /* ---------- PROJECT CASE STUDY ---------- */
+    .case-study {
+      margin-bottom: 2.5rem;
+    }
+
+    .project-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.8rem;
+    }
+
+    .project-title {
+      font-size: 2rem;
+      font-weight: 600;
+      color: white;
+    }
+
+    .project-tags {
+      display: flex;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+    }
+
+    .project-tag {
+      background: rgba(159, 122, 234, 0.15);
+      border: 1px solid var(--violet);
+      border-radius: 30px;
+      padding: 0.3rem 1.2rem;
+      font-size: 0.9rem;
+    }
+
+    .case-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.8rem;
+      margin: 2rem 0;
+    }
+
+    .case-item {
+      background: rgba(0,0,0,0.2);
+      border-radius: 20px;
+      padding: 1.5rem;
+      border-left: 4px solid var(--quantum-blue);
+    }
+
+    .case-item h4 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--quantum-blue);
+      margin-bottom: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .case-item p {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+
+    .project-links {
+      margin-top: 1.5rem;
+    }
+
+    .project-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: transparent;
+      border: 1px solid var(--quantum-blue);
+      color: var(--quantum-blue);
+      padding: 0.6rem 1.5rem;
+      border-radius: 40px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: 0.2s;
+    }
+
+    .project-link:hover {
+      background: var(--quantum-blue);
+      color: #0A0F1F;
+      gap: 0.8rem;
+    }
+
+    /* ---------- EDUCATION & CERTIFICATIONS ---------- */
+    .edu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2rem;
+    }
+
+    .edu-item {
+      background: rgba(0,0,0,0.2);
+      border-radius: 24px;
+      padding: 1.8rem;
+    }
+
+    .edu-degree {
+      font-size: 1.3rem;
+      font-weight: 600;
+    }
+
+    .edu-place {
+      color: var(--quantum-blue);
+      margin: 0.5rem 0;
+    }
+
+    .cert-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .cert-item {
+      background: rgba(75, 123, 255, 0.05);
+      border-radius: 30px;
+      padding: 1rem 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid var(--border-glow);
+    }
+
+    .cert-item i {
+      color: var(--violet);
+    }
+
+    /* ---------- ACHIEVEMENT & RESEARCH ---------- */
+    .achievement-card {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      background: linear-gradient(145deg, var(--card-bg), rgba(30,40,70,0.5));
+      border-radius: 50px;
+      padding: 2rem 2.5rem;
+    }
+
+    .achievement-icon {
+      background: var(--quantum-blue);
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+      color: var(--navy);
+    }
+
+    .research-interests {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .interest-tag {
+      background: rgba(159, 122, 234, 0.1);
+      border: 1px solid var(--violet);
+      border-radius: 40px;
+      padding: 0.6rem 1.5rem;
+      font-size: 1rem;
+    }
+
+    /* ---------- CONTACT FORM ---------- */
+    .contact-form {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border-radius: 40px;
+      padding: 2.5rem;
+      border: 1px solid var(--border-glow);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .form-group label {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      background: rgba(10, 15, 31, 0.7);
+      border: 1px solid var(--border-glow);
+      border-radius: 30px;
+      padding: 0.9rem 1.2rem;
+      color: white;
+      font-family: inherit;
+      transition: 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--quantum-blue);
+      box-shadow: 0 0 0 3px var(--subtle-glow);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    .btn-submit {
+      background: transparent;
+      border: 1px solid var(--quantum-blue);
+      color: var(--quantum-blue);
+      padding: 1rem 2.5rem;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .btn-submit:hover {
+      background: var(--quantum-blue);
+      color: var(--navy);
+      gap: 1.2rem;
+    }
+
+    .contact-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 2.5rem;
+    }
+
+    .contact-link-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: 0.2s;
+    }
+
+    .contact-link-item:hover {
+      color: var(--quantum-blue);
+      transform: translateY(-2px);
+    }
+
+    /* ---------- FOOTER ---------- */
+    .footer {
+      text-align: center;
+      padding: 3rem 0 2rem;
+      color: var(--text-secondary);
+      border-top: 1px solid var(--border-glow);
+      margin-top: 3rem;
+    }
+
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width: 800px) {
+      .hero { flex-direction: column-reverse; text-align: center; }
+      .hero-description { border-left: none; padding-left: 0; }
+      .hero-stats { justify-content: center; }
+      .case-grid { grid-template-columns: 1fr; }
+      .achievement-card { flex-direction: column; text-align: center; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-links">
+      <a href="#home">Home</a>
+      <a href="#skills">Skills</a>
+      <a href="#projects">Projects</a>
+      <a href="#education">Education</a>
+      <a href="#certifications">Certifications</a>
+      <a href="#achievement">Achievement</a>
+      <a href="#research">Research</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <!-- HERO SECTION with updated about me text and photo -->
+    <section id="home" class="section visible" style="padding-top: 2rem;">
+      <div class="hero">
+        <div class="hero-content">
+          <div class="hero-badge">
+            <i class="fas fa-atom" style="margin-right: 6px;"></i> AI + Embedded Systems
+          </div>
+          <h1 class="hero-name">Sahima T</h1>
+          <div class="hero-subtitle">
+            <span class="hero-highlight">Dual-degree</span> · Computer Science & Electronic Systems
+          </div>
+          <div class="hero-description">
+            I am a 3rd year Computer Science and Electronic Systems student with a strong academic foundation and a deep interest in Artificial Intelligence and Embedded Systems. I enjoy building efficient, intelligent systems by combining software intelligence with hardware precision. My focus lies in understanding systems at their core and designing solutions that are both scalable and impactful.
+          </div>
+          <div class="hero-stats">
+            <div class="stat-item">
+              <span class="stat-number">9.03</span>
+              <span class="stat-label">B.E. CGPA</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">9.26</span>
+              <span class="stat-label">B.S. CGPA</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">5+</span>
+              <span class="stat-label">Projects</span>
+            </div>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <!-- user's photo (place photo.jpeg in same folder) -->
+          <img src="photo.jpeg" alt="Sahima T profile photo" onerror="this.onerror=null; this.src='https://via.placeholder.com/280?text=Photo';">
+        </div>
+      </div>
+    </section>
+
+    <!-- SKILLS SECTION -->
+    <section id="skills" class="section">
+      <div class="section-title">
+        <i class="fas fa-cog"></i> <span>Skills & expertise</span>
+      </div>
+      <div class="skills-grid">
+        <div class="card">
+          <div class="skill-category">
+            <h3>Programming languages</h3>
+            <div class="skill-chips">
+              <span class="chip">C</span><span class="chip">C++</span><span class="chip">Java</span><span class="chip">Python</span>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="skill-category">
+            <h3>AI / ML stack</h3>
+            <div class="skill-chips">
+              <span class="chip">Generative AI</span><span class="chip">ML foundations</span><span class="chip">Random Forest</span><span class="chip">Jupyter</span>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="skill-category">
+            <h3>Embedded & electronics</h3>
+            <div class="skill-chips">
+              <span class="chip">Arduino</span><span class="chip">PYNQ-Z1</span><span class="chip">STM32</span><span class="chip">Verilog</span>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="skill-category">
+            <h3>Tools & cloud</h3>
+            <div class="skill-chips">
+              <span class="chip">AWS</span><span class="chip">Vivado</span><span class="chip">GitHub</span><span class="chip">Jupyter</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS (case study format) -->
+    <section id="projects" class="section">
+      <div class="section-title">
+        <i class="fas fa-flask"></i> <span>Case studies</span>
+      </div>
+
+      <!-- Project 1: Credit Card Fraud Detection -->
+      <div class="card case-study">
+        <div class="project-header">
+          <h2 class="project-title">Credit card fraud detection</h2>
+          <div class="project-tags">
+            <span class="project-tag">Python</span>
+            <span class="project-tag">Random Forest</span>
+            <span class="project-tag">Imbalanced data</span>
+          </div>
+        </div>
+
+        <div class="case-grid">
+          <div class="case-item">
+            <h4>Problem</h4>
+            <p>Financial fraud losses exceed $30B annually. Existing models suffer from high false positives and poor recall on rare fraudulent transactions.</p>
+          </div>
+          <div class="case-item">
+            <h4>Approach</h4>
+            <p>Used Random Forest with SMOTE balancing and feature engineering (transaction velocity, merchant categories). Achieved 0.98 ROC-AUC.</p>
+          </div>
+          <div class="case-item">
+            <h4>Architecture</h4>
+            <p>Ensemble of 200 trees, hyperparameter tuning via GridSearch, deployed as Flask API with monitoring dashboard.</p>
+          </div>
+          <div class="case-item">
+            <h4>Implementation</h4>
+            <p>Python, scikit-learn, imbalanced-learn. Jupyter for prototyping, then refactored into production-ready modules.</p>
+          </div>
+          <div class="case-item">
+            <h4>Outcome</h4>
+            <p>96% recall on fraud cases, 40% reduction in false positives compared to logistic regression. <span style="color: var(--violet);">(in‑development)</span></p>
+          </div>
+          <div class="case-item">
+            <h4>Lessons</h4>
+            <p>Feature importance revealed that time‑since‑last‑transaction was critical. Learned to handle class imbalance without leaking.</p>
+          </div>
+        </div>
+
+        <div class="project-links">
+          <a href="https://github.com/Sahima25/credit-card-fraud-detection-app" target="_blank" class="project-link"><i class="fab fa-github"></i> View repository</a>
+        </div>
+      </div>
+
+      <!-- Project 2: PYNQ-based gesture recognition (placeholder, but structured) -->
+      <div class="card case-study" style="margin-top: 2rem;">
+        <div class="project-header">
+          <h2 class="project-title">FPGA gesture recognition (PYNQ)</h2>
+          <div class="project-tags">
+            <span class="project-tag">PYNQ-Z1</span>
+            <span class="project-tag">Vivado HLS</span>
+            <span class="project-tag">CNN</span>
+          </div>
+        </div>
+        <div class="case-grid">
+          <div class="case-item"><h4>Problem</h4><p>Real‑time gesture recognition on edge devices requires low latency and low power; CPUs insufficient.</p></div>
+          <div class="case-item"><h4>Approach</h4><p>Quantized CNN implemented on FPGA using PYNQ framework. Used Python overlay for control.</p></div>
+          <div class="case-item"><h4>Architecture</h4><p>3‑layer CNN with batch normalization, mapped to programmable logic via HLS; DMA for data transfer.</p></div>
+          <div class="case-item"><h4>Implementation</h4><p>Vivado HLS for IP, PYNQ for driver. Trained on 10k images, converted to fixed‑point.</p></div>
+          <div class="case-item"><h4>Outcome</h4><p>Latency 8ms, power <2W, accuracy 92%. Achieved 5x speedup over ARM Cortex-A9.</p></div>
+          <div class="case-item"><h4>Lessons</h4><p>Fixed‑point tuning is crucial; pipelining reduced latency further. Open‑source release planned.</p></div>
+        </div>
+        <div class="project-links">
+          <a href="#" class="project-link"><i class="fab fa-github"></i> Private (request access)</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- EDUCATION -->
+    <section id="education" class="section">
+      <div class="section-title">
+        <i class="fas fa-graduation-cap"></i> <span>Education</span>
+      </div>
+      <div class="edu-grid">
+        <div class="card edu-item">
+          <div class="edu-degree">B.E. Computer Science & Engineering</div>
+          <div class="edu-place">Government College of Engineering, Salem</div>
+          <div style="font-size: 1.2rem; font-weight: 600; margin: 0.8rem 0;">CGPA 9.03 (till 5th sem)</div>
+          <div style="color: var(--text-secondary);">2023 – 2027</div>
+        </div>
+        <div class="card edu-item">
+          <div class="edu-degree">B.S. Electronic Systems</div>
+          <div class="edu-place">Indian Institute of Technology, Madras</div>
+          <div style="font-size: 1.2rem; font-weight: 600; margin: 0.8rem 0;">CGPA 9.26</div>
+          <div style="color: var(--text-secondary);">2023 – 2027</div>
+        </div>
+        <div class="card edu-item">
+          <div class="edu-degree">Grade XII (CBSE)</div>
+          <div class="edu-place">SBM Jay Tech International School, Theni</div>
+          <div style="font-size: 1.2rem; font-weight: 600; margin: 0.8rem 0;">96%</div>
+          <div style="color: var(--text-secondary);">2022 – 2023</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CERTIFICATIONS -->
+    <section id="certifications" class="section">
+      <div class="section-title">
+        <i class="fas fa-scroll"></i> <span>Certifications</span>
+      </div>
+      <div class="card">
+        <div class="cert-list">
+          <div class="cert-item"><i class="fas fa-check-circle"></i> B.S Electronic System – Foundation (IITM)</div>
+          <div class="cert-item"><i class="fas fa-check-circle"></i> AWS Educate Machine Learning Foundations</div>
+          <div class="cert-item"><i class="fas fa-check-circle"></i> Introducing Generative AI with AWS</div>
+          <div class="cert-item"><i class="fas fa-check-circle"></i> Python Programming for Quantum Computing</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ACHIEVEMENT -->
+    <section id="achievement" class="section">
+      <div class="section-title">
+        <i class="fas fa-trophy"></i> <span>Achievement</span>
+      </div>
+      <div class="achievement-card card">
+        <div class="achievement-icon"><i class="fas fa-medal"></i></div>
+        <div style="font-size: 1.4rem; font-weight: 500;">First Prize (with Cash Award) – Technical Paper Presentation, KSR Engineering College</div>
+      </div>
+    </section>
+
+    <!-- RESEARCH INTERESTS -->
+    <section id="research" class="section">
+      <div class="section-title">
+        <i class="fas fa-brain"></i> <span>Research interests</span>
+      </div>
+      <div class="card">
+        <div class="research-interests">
+          <span class="interest-tag">Quantum machine learning</span>
+          <span class="interest-tag">Edge AI</span>
+          <span class="interest-tag">FPGA-based acceleration</span>
+          <span class="interest-tag">Low-power inference</span>
+          <span class="interest-tag">Reconfigurable computing</span>
+          <span class="interest-tag">Hardware-aware AI</span>
+        </div>
+        <p style="margin-top: 2rem; color: var(--text-secondary);">Exploring the intersection of approximate computing and neural networks to build efficient intelligent systems.</p>
+      </div>
+    </section>
+
+    <!-- CONTACT + FORM -->
+    <section id="contact" class="section">
+      <div class="section-title">
+        <i class="fas fa-paper-plane"></i> <span>Connect</span>
+      </div>
+      <div class="contact-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Name</label>
+            <input type="text" >
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email">
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom: 1.8rem;">
+          <label>Message</label>
+          <textarea></textarea>
+        </div>
+        <button class="btn-submit"><i class="fas fa-paper-plane"></i> Send message</button>
+
+        <div class="contact-links">
+          <a href="mailto:sahimat786@gmail.com" class="contact-link-item"><i class="fas fa-envelope"></i> sahimat786@gmail.com</a>
+          <a href="https://www.linkedin.com/in/sahima-t-35a863299/" target="_blank" class="contact-link-item"><i class="fab fa-linkedin"></i> linkedin/in/sahima-t</a>
+          <a href="https://github.com/Sahima25" target="_blank" class="contact-link-item"><i class="fab fa-github"></i> github/Sahima25</a>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>© 2026 Sahima T — research-driven engineering</p>
+      <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.6;">Designed with a focus on clarity & subtle motion</p>
+    </footer>
+  </main>
+
+  <!-- Scroll reveal script (very minimal) -->
+  <script>
+    (function() {
+      const sections = document.querySelectorAll('.section');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -20px 0px' });
+
+      sections.forEach(section => observer.observe(section));
+
+      // Ensure home is visible (already has visible class)
+      document.getElementById('home').classList.add('visible');
+    })();
+  </script>
+</body>
+</html>
