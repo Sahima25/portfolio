@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sahima | AI Engineer & Quantum Explorer</title>
+    <!-- Tailwind + Fonts -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Outfit:wght@300;400;600;700;900&display=swap");
+
+      :root {
+        --bg-color: #020617;
+        --path-color: #06b6d4;
+      }
+
+      body {
+        background-color: var(--bg-color);
+        color: #f8fafc;
+        font-family: "Outfit", sans-serif;
+        scroll-behavior: smooth;
+        overflow-x: hidden;
+      }
+
+      .heading-font {
+        font-family: "Space Grotesk", sans-serif;
+      }
+
+      /* Fixed Navigation Bar */
+      .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 100;
+        background: rgba(2, 6, 23, 0.85);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(6, 182, 212, 0.2);
+        padding: 0.8rem 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+      }
+
+      .nav-logo {
+        font-size: 1.5rem;
+        font-weight: 700;
+        background: linear-gradient(145deg, #9ad0ff, #b794ff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 2rem;
+        flex-wrap: wrap;
+      }
+
+      .nav-links a {
+        color: #e0e4f0;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 0.95rem;
+        transition: 0.2s;
+        border-bottom: 2px solid transparent;
+        padding-bottom: 4px;
+      }
+
+      .nav-links a:hover {
+        color: #06b6d4;
+        border-bottom-color: #06b6d4;
+      }
+
+      /* Adjust main content top padding to avoid overlap with fixed navbar */
+      .main-content {
+        margin-left: 140px;
+        padding: 6rem 2rem 2rem 0; /* increased top padding for navbar */
+        max-width: 1100px;
+      }
+
+      @media (max-width: 768px) {
+        .navbar {
+          padding: 0.8rem 1rem;
+          justify-content: center;
+        }
+        .nav-links {
+          gap: 1rem;
+          margin-top: 0.5rem;
+          justify-content: center;
+        }
+        .path-container {
+          display: none;
+        }
+        .main-content {
+          margin-left: 0;
+          padding: 6rem 1rem 1rem;
+        }
+      }
+
+      /* Journey path container */
+      .path-container {
+        position: fixed;
+        left: 0;
+        top: 0;
+        height: 100vh;
+        width: 120px;
+        z-index: 5;
+        pointer-events: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .path-svg {
+        width: 100%;
+        height: 100%;
+      }
+
+      .path-line-bg {
+        stroke: #1e293b;
+        stroke-width: 4;
+        fill: none;
+        stroke-dasharray: 15 15;
+      }
+
+      .path-line-fg {
+        stroke: #06b6d4;
+        stroke-width: 6;
+        fill: none;
+        stroke-linecap: round;
+        filter: drop-shadow(0 0 8px #06b6d4);
+        transition: stroke-dashoffset 0.1s linear;
+      }
+
+      /* Robot guide */
+      .robot-guide {
+        position: absolute;
+        width: 60px;
+        height: 60px;
+        filter: drop-shadow(0 0 8px #06b6d4);
+        animation: float 4s ease-in-out infinite;
+        z-index: 30;
+        pointer-events: none;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      .robot-guide img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+
+      .speech-bubble {
+        position: absolute;
+        top: -30px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #06b6d4;
+        color: #020617;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+        white-space: nowrap;
+        box-shadow: 0 4px 12px rgba(6, 182, 212, 0.5);
+        pointer-events: none;
+      }
+
+      .speech-bubble::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        border-width: 6px 6px 0;
+        border-style: solid;
+        border-color: #06b6d4 transparent transparent;
+      }
+
+      /* Glass cards */
+      .glass-card {
+        background: rgba(15, 23, 42, 0.8);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 2rem;
+        transition: transform 0.3s ease, border-color 0.3s;
+      }
+
+      .glass-card:hover {
+        border-color: #06b6d4;
+        transform: translateY(-5px);
+      }
+
+      /* Button style */
+      .begin-btn {
+        background: transparent;
+        border: 2px solid #06b6d4;
+        color: #06b6d4;
+        padding: 0.8rem 2.5rem;
+        border-radius: 40px;
+        font-weight: 700;
+        font-size: 1.2rem;
+        cursor: pointer;
+        transition: all 0.3s;
+        box-shadow: 0 0 15px #06b6d480;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .begin-btn:hover {
+        background: #06b6d4;
+        color: #020617;
+        box-shadow: 0 0 30px #06b6d4;
+      }
+
+      /* Skill icons */
+      .skill-icon {
+        width: 40px;
+        height: 40px;
+        filter: brightness(0) invert(1);
+        transition: filter 0.2s;
+      }
+      .skill-icon:hover {
+        filter: brightness(0) invert(0.8) sepia(1) hue-rotate(150deg);
+      }
+
+      /* Form */
+      .form-input {
+        background: #1e293b;
+        border: 1px solid #334155;
+        border-radius: 50px;
+        padding: 1rem 1.5rem;
+        color: white;
+        width: 100%;
+        outline: none;
+        transition: border-color 0.3s;
+      }
+      .form-input:focus {
+        border-color: #06b6d4;
+      }
+
+      .send-btn {
+        background: #06b6d4;
+        color: #020617;
+        font-weight: 700;
+        padding: 1rem 2.5rem;
+        border-radius: 50px;
+        border: none;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+      .send-btn:hover {
+        background: #0e7490;
+        color: white;
+      }
+
+      /* ========== ANIMATIONS ========== */
+      /* Fade-up animation */
+      .fade-up {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.8s ease, transform 0.8s ease;
+      }
+      .fade-up.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* Floating particles (fixed on right) */
+      @keyframes float-slow {
+        0%,
+        100% {
+          transform: translateY(0) translateX(0);
+        }
+        50% {
+          transform: translateY(-20px) translateX(10px);
+        }
+      }
+      @keyframes float-medium {
+        0%,
+        100% {
+          transform: translateY(0) translateX(0);
+        }
+        50% {
+          transform: translateY(30px) translateX(-10px);
+        }
+      }
+      @keyframes float-fast {
+        0%,
+        100% {
+          transform: translateY(0) translateX(0);
+        }
+        50% {
+          transform: translateY(-40px) translateX(5px);
+        }
+      }
+      .animate-float-slow {
+        animation: float-slow 8s ease-in-out infinite;
+      }
+      .animate-float-medium {
+        animation: float-medium 6s ease-in-out infinite;
+      }
+      .animate-float-fast {
+        animation: float-fast 4s ease-in-out infinite;
+      }
+
+      /* Pulse animation for hero blobs */
+      @keyframes pulse-slow {
+        0%,
+        100% {
+          opacity: 0.6;
+          transform: translateY(-50%) scale(1);
+        }
+        50% {
+          opacity: 1;
+          transform: translateY(-50%) scale(1.1);
+        }
+      }
+      .animate-pulse-slow {
+        animation: pulse-slow 6s ease-in-out infinite;
+      }
+
+      /* Rotating word transition */
+      #rotating-word {
+        transition: opacity 0.3s;
+        display: inline-block;
+        min-width: 160px;
+        text-align: left;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Fixed Navigation Panel -->
+    <nav class="navbar">
+      <span class="nav-logo"> Sahima</span>
+      <div class="nav-links">
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#skills">Skills</a>
+        <a href="#projects">Projects</a>
+        <a href="#education">Education</a>
+        <a href="#certifications">Certifications</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </nav>
+
+    <!-- Fixed Path Container -->
+    <div class="path-container">
+      <svg class="path-svg" viewBox="0 0 120 1000" preserveAspectRatio="none">
+        <path
+          class="path-line-bg"
+          d="M 60 0 C 90 200, 30 400, 60 600 C 90 800, 30 1000, 60 1200"
+          vector-effect="non-scaling-stroke"
+        />
+        <path
+          id="active-path"
+          class="path-line-fg"
+          d="M 60 0 C 90 200, 30 400, 60 600 C 90 800, 30 1000, 60 1200"
+          vector-effect="non-scaling-stroke"
+          stroke-dasharray="1200"
+          stroke-dashoffset="1200"
+        />
+      </svg>
+      <!-- Dots for sections (optional) -->
+      <div
+        class="absolute top-[15%] left-1/2 transform -translate-x-1/2 w-2 h-2 bg-cyan-400 rounded-full shadow-lg"
+      ></div>
+      <div
+        class="absolute top-[30%] left-1/2 transform -translate-x-1/2 w-2 h-2 bg-cyan-400 rounded-full shadow-lg"
+      ></div>
+      <div
+        class="absolute top-[45%] left-1/2 transform -translate-x-1/2 w-2 h-2 bg-cyan-400 rounded-full shadow-lg"
+      ></div>
+      <div
+        class="absolute top-[60%] left-1/2 transform -translate-x-1/2 w-2 h-2 bg-cyan-400 rounded-full shadow-lg"
+      ></div>
+      <div
+        class="absolute top-[75%] left-1/2 transform -translate-x-1/2 w-2 h-2 bg-cyan-400 rounded-full shadow-lg"
+      ></div>
+      <div
+        class="absolute top-[90%] left-1/2 transform -translate-x-1/2 w-2 h-2 bg-cyan-400 rounded-full shadow-lg"
+      ></div>
+    </div>
+
+    <!-- ========== FLOATING PARTICLES (RIGHT SIDE, GLOBAL) ========== -->
+    <div
+      class="fixed right-5 top-0 h-full w-24 pointer-events-none z-0 hidden lg:block"
+    >
+      <div
+        class="absolute top-1/4 right-0 w-16 h-16 bg-cyan-500/10 rounded-full blur-xl animate-float-slow"
+      ></div>
+      <div
+        class="absolute top-2/3 right-5 w-20 h-20 bg-purple-500/10 rounded-full blur-2xl animate-float-medium"
+      ></div>
+      <div
+        class="absolute bottom-1/4 right-10 w-12 h-12 bg-emerald-500/10 rounded-full blur-lg animate-float-fast"
+      ></div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content relative z-10">
+      <!-- Hero Section (id=home) -->
+      <section
+        id="home"
+        class="min-h-screen flex flex-col justify-center items-center text-center relative"
+      >
+        <!-- Robot guide (left side) -->
+        <div class="robot-guide" style="top: 20%; left: 10%">
+          <div class="speech-bubble">Welcome to my journey!</div>
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/4712/4712035.png"
+            alt="Robot guide"
+          />
+        </div>
+
+        <!-- ========== DECORATIVE BLOBS ON RIGHT SIDE (HERO ONLY) ========== -->
+        <div
+          class="absolute right-5 top-1/2 transform -translate-y-1/2 w-72 h-72 bg-gradient-to-br from-cyan-500/20 via-purple-500/20 to-pink-500/20 rounded-full blur-3xl animate-pulse-slow pointer-events-none hidden lg:block"
+        ></div>
+        <div
+          class="absolute right-20 top-2/3 transform -translate-y-1/2 w-40 h-40 bg-gradient-to-tr from-emerald-500/20 to-cyan-500/20 rounded-full blur-2xl animate-float-slow pointer-events-none hidden lg:block"
+        ></div>
+
+        <!-- Main hero content (centered) -->
+        <div class="flex flex-col items-center gap-6">
+          <!-- Photo -->
+          <div
+            class="w-48 h-48 rounded-full bg-gradient-to-r from-cyan-500 to-purple-600 p-1 shadow-xl shadow-cyan-500/30"
+          >
+            <img
+              src="photo.jpeg"
+              alt="Sahima"
+              class="w-full h-full rounded-full object-cover border-4 border-slate-900"
+            />
+          </div>
+          <h1
+            class="heading-font text-6xl md:text-8xl font-black tracking-tighter"
+          >
+            SAHIMA T<span class="text-cyan-400"></span>
+          </h1>
+          <!-- Rotating words -->
+          <p class="text-slate-400 text-xl max-w-2xl">
+            Aspiring AI engineer · Dual degree ·
+            <span id="rotating-word" class="text-cyan-400 font-semibold"></span>
+          </p>
+          <!-- Begin Journey Button -->
+          <button id="beginJourney" class="begin-btn mt-8">
+            <i class="fa-solid fa-route"></i> Begin Journey
+          </button>
+        </div>
+      </section>
+
+      <!-- About Me -->
+      <section id="about" class="my-32 relative">
+        <div class="robot-guide" style="top: -30px; left: -50px">
+          <div class="speech-bubble">Hi, I'm Sahima!</div>
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/4712/4712035.png"
+            alt="Robot"
+          />
+        </div>
+        <div class="glass-card p-10 md:p-14 fade-up">
+          <h2 class="heading-font text-4xl font-bold mb-8 text-cyan-400">
+            About Me
+          </h2>
+          <div class="space-y-4 text-slate-300 text-lg">
+            <p>
+              Hi, I’m Sahima. I am an aspiring AI engineer driven by curiosity
+              about intelligent systems and their real-world impact. I aim to
+              build practical AI systems that combine intelligence with
+              meaningful, real-world applications.
+            </p>
+            <p>
+              I am currently pursuing a Dual Degree, strengthening my foundation
+              in both theoretical and applied aspects of computing. My interests
+              span Artificial Intelligence, IoT, Embedded Systems, and Quantum
+              Computing. I am particularly interested in exploring how
+              intelligent algorithms can integrate with hardware and emerging
+              quantum technologies to shape the next generation of computing.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Skills -->
+      <section id="skills" class="my-32 relative">
+        <div class="robot-guide" style="top: -30px; right: -50px">
+          <div class="speech-bubble">My tech stack</div>
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/4712/4712035.png"
+            alt="Robot"
+          />
+        </div>
+        <div class="glass-card p-10 md:p-14 fade-up">
+          <h2 class="heading-font text-4xl font-bold mb-10 text-purple-400">
+            Skills & Tools
+          </h2>
+          <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <!-- Programming -->
+            <div>
+              <h3 class="text-xl font-bold mb-3 text-white">Programming</h3>
+              <div class="flex flex-wrap gap-2">
+                <span class="bg-slate-800 px-3 py-1 rounded-full text-sm"
+                  >C</span
+                >
+                <span class="bg-slate-800 px-3 py-1 rounded-full text-sm"
+                  >C++</span
+                >
+                <span class="bg-slate-800 px-3 py-1 rounded-full text-sm"
+                  >Java</span
+                >
+                <span class="bg-slate-800 px-3 py-1 rounded-full text-sm"
+                  >Python</span
+                >
+              </div>
+            </div>
+            <!-- AI/ML -->
+            <div>
+              <h3 class="text-xl font-bold mb-3 text-white">AI/ML</h3>
+              <div class="flex flex-wrap gap-2">
+                <span class="bg-slate-800 px-3 py-1 rounded-full text-sm"
+                  >Generative AI</span
+                >
+                <span class="bg-slate-800 px-3 py-1 rounded-full text-sm"
+                  >ML Foundations</span
+                >
+              </div>
+            </div>
+            <!-- Embedded & Electronics -->
+            <div>
+              <h3 class="text-xl font-bold mb-3 text-white">
+                Embedded & Electronics
+              </h3>
+              <div class="flex flex-wrap gap-2">
+                <span class="bg-slate-800 px-3 py-1 rounded-full text-sm"
+                  >Arduino</span
+                >
+                <span class="bg-slate-800 px-3 py-1 rounded-full text-sm"
+                  >PYZQ-Z1</span
+                >
+                <span class="bg-slate-800 px-3 py-1 rounded-full text-sm"
+                  >STM32</span
+                >
+                <span class="bg-slate-800 px-3 py-1 rounded-full text-sm"
+                  >Verilog</span
+                >
+              </div>
+              <div class="flex gap-3 mt-4">
+                <img
+                  src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/arduino/arduino-original.svg"
+                  class="skill-icon"
+                  alt="Arduino"
+                />
+                <img
+                  src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/embeddedc/embeddedc-original.svg"
+                  class="skill-icon"
+                  alt="Embedded C"
+                />
+              </div>
+            </div>
+            <!-- Tools & Cloud -->
+            <div>
+              <h3 class="text-xl font-bold mb-3 text-white">Tools & Cloud</h3>
+              <div class="flex flex-wrap gap-2">
+                <span class="bg-slate-800 px-3 py-1 rounded-full text-sm"
+                  >AWS</span
+                >
+                <span class="bg-slate-800 px-3 py-1 rounded-full text-sm"
+                  >Vivado</span
+                >
+                <span class="bg-slate-800 px-3 py-1 rounded-full text-sm"
+                  >Jupyter</span
+                >
+                <span class="bg-slate-800 px-3 py-1 rounded-full text-sm"
+                  >Git</span
+                >
+              </div>
+              <div class="flex gap-3 mt-4">
+                <img
+                  src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original.svg"
+                  class="skill-icon"
+                  alt="AWS"
+                />
+                <img
+                  src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg"
+                  class="skill-icon"
+                  alt="Git"
+                />
+                <span class="text-xs bg-slate-700 px-2 py-1 rounded"
+                  >Vivado</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Projects -->
+      <section id="projects" class="my-32 relative">
+        <div class="robot-guide" style="top: -30px; left: -50px">
+          <div class="speech-bubble">Check my work</div>
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/4712/4712035.png"
+            alt="Robot"
+          />
+        </div>
+        <div class="glass-card p-10 md:p-14 fade-up">
+          <h2 class="heading-font text-4xl font-bold mb-10 text-emerald-400">
+            Projects
+          </h2>
+          <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Credit Card Fraud -->
+            <div
+              class="bg-slate-800/50 p-6 rounded-2xl border border-slate-700 hover:border-cyan-500 transition"
+            >
+              <i
+                class="fa-solid fa-credit-card text-3xl text-cyan-400 mb-3"
+              ></i>
+              <h3 class="text-xl font-bold">Credit Card Fraud Detection</h3>
+              <div class="flex flex-wrap gap-2 my-2">
+                <span class="text-xs bg-cyan-900/50 px-2 py-1 rounded"
+                  >Python</span
+                >
+                <span class="text-xs bg-cyan-900/50 px-2 py-1 rounded"
+                  >Scikit-learn</span
+                >
+                <span class="text-xs bg-cyan-900/50 px-2 py-1 rounded"
+                  >Random Forest</span
+                >
+              </div>
+              <p class="text-sm text-slate-400 mt-2">
+                ML app to detect fraudulent transactions using Random Forest.
+                Feature engineering, model evaluation, reduced false positives.
+              </p>
+              <a
+                href="https://github.com/Sahima25/credit-card-fraud-detection-app"
+                class="inline-block mt-4 text-cyan-400 hover:underline text-sm"
+                ><i class="fa-brands fa-github"></i> GitHub</a
+              >
+            </div>
+            <!-- Student Management -->
+            <div
+              class="bg-slate-800/50 p-6 rounded-2xl border border-slate-700 hover:border-cyan-500 transition"
+            >
+              <i class="fa-solid fa-database text-3xl text-purple-400 mb-3"></i>
+              <h3 class="text-xl font-bold">Student Management System</h3>
+              <div class="flex flex-wrap gap-2 my-2">
+                <span class="text-xs bg-purple-900/50 px-2 py-1 rounded"
+                  >Java</span
+                >
+                <span class="text-xs bg-purple-900/50 px-2 py-1 rounded"
+                  >JDBC</span
+                >
+                <span class="text-xs bg-purple-900/50 px-2 py-1 rounded"
+                  >MySQL</span
+                >
+              </div>
+              <p class="text-sm text-slate-400 mt-2">
+                Database-driven system with CRUD operations. Strengthened
+                backend and software architecture skills.
+              </p>
+              <a
+                href="#"
+                class="inline-block mt-4 text-purple-400 hover:underline text-sm"
+                ><i class="fa-brands fa-github"></i> GitHub (in progress)</a
+              >
+            </div>
+            <!-- Q-FORENSICS -->
+            <div
+              class="bg-slate-800/50 p-6 rounded-2xl border border-slate-700 hover:border-cyan-500 transition"
+            >
+              <i class="fa-solid fa-atom text-3xl text-emerald-400 mb-3"></i>
+              <h3 class="text-xl font-bold">Q-FORENSICS</h3>
+              <div class="flex flex-wrap gap-2 my-2">
+                <span class="text-xs bg-emerald-900/50 px-2 py-1 rounded"
+                  >Quantum ML</span
+                >
+                <span class="text-xs bg-emerald-900/50 px-2 py-1 rounded"
+                  >Deepfake</span
+                >
+                <span class="text-xs bg-emerald-900/50 px-2 py-1 rounded"
+                  >Spatial-frequency</span
+                >
+              </div>
+              <p class="text-sm text-slate-400 mt-2">
+                Hybrid quantum–classical framework for deepfake detection.
+                Ongoing mini-project.
+              </p>
+              <span class="inline-block mt-4 text-emerald-400 text-sm"
+                >⏳ Research project</span
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Education -->
+      <section id="education" class="my-32 relative">
+        <div class="robot-guide" style="top: -30px; right: -50px">
+          <div class="speech-bubble">My academic path</div>
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/4712/4712035.png"
+            alt="Robot"
+          />
+        </div>
+        <div class="glass-card p-10 md:p-14 fade-up">
+          <h2 class="heading-font text-4xl font-bold mb-10 text-yellow-400">
+            Education
+          </h2>
+          <div class="space-y-6">
+            <div class="border-l-4 border-yellow-500 pl-6">
+              <p class="text-xl font-bold">
+                B.E. Computer Science and Engineering
+              </p>
+              <p class="text-yellow-400">
+                Government College of Engineering, Salem · CGPA 9.03
+              </p>
+              <p class="text-sm text-slate-400">
+                Core CS, algorithms, AI coursework
+              </p>
+            </div>
+            <div class="border-l-4 border-cyan-500 pl-6">
+              <p class="text-xl font-bold">B.S. in Electronic Systems</p>
+              <p class="text-cyan-400">
+                Indian Institute of Technology Madras · CGPA 9.26
+              </p>
+              <p class="text-sm text-slate-400">
+                Electronics, embedded systems, system-level design
+              </p>
+            </div>
+            <div class="border-l-4 border-slate-500 pl-6">
+              <p class="text-xl font-bold">Grade XII (CBSE)</p>
+              <p class="text-slate-400">
+                SBM Jay Tech International School · 96%
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Certifications -->
+      <section id="certifications" class="my-32 relative">
+        <div class="robot-guide" style="top: -30px; left: -50px">
+          <div class="speech-bubble">Verified skills</div>
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/4712/4712035.png"
+            alt="Robot"
+          />
+        </div>
+        <div class="glass-card p-10 md:p-14 fade-up">
+          <h2 class="heading-font text-4xl font-bold mb-10 text-slate-100">
+            Certifications
+          </h2>
+          <div class="grid md:grid-cols-2 gap-4">
+            <div class="bg-slate-800/40 p-4 rounded-xl flex items-center gap-3">
+              <i class="fa-solid fa-certificate text-2xl text-cyan-400"></i>
+              <span>BS in Electronic Systems – Foundation (IITM)</span>
+            </div>
+            <div class="bg-slate-800/40 p-4 rounded-xl flex items-center gap-3">
+              <i class="fa-brands fa-aws text-2xl text-orange-400"></i>
+              <span>AWS Educate – Machine Learning Foundations</span>
+            </div>
+            <div class="bg-slate-800/40 p-4 rounded-xl flex items-center gap-3">
+              <i class="fa-solid fa-robot text-2xl text-green-400"></i>
+              <span>Introducing Generative AI with AWS</span>
+            </div>
+            <div class="bg-slate-800/40 p-4 rounded-xl flex items-center gap-3">
+              <i class="fa-solid fa-quantum text-2xl text-purple-400"></i>
+              <span>Python Programming for Quantum Computing</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Contact -->
+      <section id="contact" class="my-32 relative">
+        <div class="robot-guide" style="top: -30px; right: -50px">
+          <div class="speech-bubble">Let's connect</div>
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/4712/4712035.png"
+            alt="Robot"
+          />
+        </div>
+        <div class="glass-card p-10 md:p-14 fade-up">
+          <h2 class="heading-font text-4xl font-bold mb-10 text-pink-400">
+            Contact
+          </h2>
+          <div class="grid md:grid-cols-2 gap-10">
+            <!-- Form -->
+            <div>
+              <form
+                id="contactForm"
+                onsubmit="event.preventDefault(); alert('Message sent (demo)');"
+              >
+                <div class="mb-4">
+                  <input
+                    type="text"
+                    placeholder="Your name"
+                    class="form-input"
+                    required
+                  />
+                </div>
+                <div class="mb-4">
+                  <input
+                    type="email"
+                    placeholder="Email address"
+                    class="form-input"
+                    required
+                  />
+                </div>
+                <div class="mb-4">
+                  <textarea
+                    rows="4"
+                    placeholder="Your message"
+                    class="form-input !rounded-3xl"
+                  ></textarea>
+                </div>
+                <button type="submit" class="send-btn w-full">
+                  <i class="fa-regular fa-paper-plane mr-2"></i> Send
+                </button>
+              </form>
+            </div>
+            <!-- Links -->
+            <div class="flex flex-col gap-6 justify-center">
+              <a
+                href="mailto:sahimat786@gmail.com"
+                class="text-xl hover:text-cyan-400 transition"
+                ><i class="fa-regular fa-envelope mr-3"></i>
+                sahimat786@gmail.com</a
+              >
+              <a
+                href="https://www.linkedin.com/in/sahima-t-35a863299/"
+                class="text-xl hover:text-cyan-400 transition"
+                ><i class="fa-brands fa-linkedin mr-3"></i> LinkedIn</a
+              >
+              <a
+                href="https://github.com/Sahima25"
+                class="text-xl hover:text-cyan-400 transition"
+                ><i class="fa-brands fa-github mr-3"></i> GitHub</a
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="text-center text-slate-500 py-10">
+        <p>⚡Sahima · AI & Quantum journey ⚡</p>
+      </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+      // Path drawing
+      const path = document.getElementById("active-path");
+      const pathLength = path.getTotalLength();
+      path.style.strokeDasharray = pathLength;
+      path.style.strokeDashoffset = pathLength;
+
+      function updatePath() {
+        const scrollY = window.scrollY;
+        const maxScroll =
+          document.documentElement.scrollHeight - window.innerHeight;
+        const scrollPercent = scrollY / maxScroll;
+        const draw = Math.min(1, Math.max(0, scrollPercent));
+        path.style.strokeDashoffset = pathLength * (1 - draw);
+      }
+      window.addEventListener("scroll", updatePath);
+      updatePath();
+
+      // Begin Journey button
+      document.getElementById("beginJourney").addEventListener("click", () => {
+        document.getElementById("about").scrollIntoView({ behavior: "smooth" });
+        setTimeout(updatePath, 100);
+      });
+
+      // Smooth scroll for nav links
+      document.querySelectorAll(".nav-links a").forEach((link) => {
+        link.addEventListener("click", (e) => {
+          e.preventDefault();
+          const targetId = link.getAttribute("href").substring(1);
+          const target = document.getElementById(targetId);
+          if (target) target.scrollIntoView({ behavior: "smooth" });
+        });
+      });
+
+      // Rotating words
+      const words = [
+        "Quantum explorer",
+        "IoT enthusiast",
+        "ML practitioner",
+        "Hardware tinkerer",
+      ];
+      let wordIndex = 0;
+      const wordSpan = document.getElementById("rotating-word");
+      function rotateWords() {
+        wordSpan.style.opacity = 0;
+        setTimeout(() => {
+          wordIndex = (wordIndex + 1) % words.length;
+          wordSpan.textContent = words[wordIndex];
+          wordSpan.style.opacity = 1;
+        }, 300);
+      }
+      setInterval(rotateWords, 2500);
+      wordSpan.textContent = words[0];
+      wordSpan.style.opacity = 1;
+
+      // Fade-up observer
+      const fadeElements = document.querySelectorAll(".fade-up");
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) entry.target.classList.add("visible");
+          });
+        },
+        { threshold: 0.2 }
+      );
+      fadeElements.forEach((el) => observer.observe(el));
+    </script>
+  </body>
+</html>
